@@ -1,0 +1,10 @@
+<h1>Page d'accueil</h1>
+<h2>{{title}}</h2>
+
+{% if age > 17 %}
+	<p>Tu es majeur!</p>
+{% else %}
+	<p>Tu es mineur</p>
+{% endif %}
+
+{# les variables title et age sont définies dans BlogController à la méthode home() #}
