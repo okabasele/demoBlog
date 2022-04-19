@@ -1,16 +1,35 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
-    <section class="row article">
-    <article class="col-md-3 mx-auto text-center border border-dark mb-3 p-3 mt-3 mr-1">
-			<h2>Titre de l'article</h2>
-			<div class="metadata">Ecrit le 04/04/2022 à 17:20 dans la catégorie Politique</div>
+	<section class="row article">
+		<article class="col-md-3 mx-auto text-center border border-dark mb-3 p-3 mt-3 mr-1">
+			<h2>{{article.title}}</h2>
+			<div class="metadata">Ecrit le
+				{{article.createdAt|date('d/m/Y à H:i:s')}}
+				dans la catégorie
+				{{article.category.title}}
+			</div>
 			<div class="content">
-				<img src="http://picsum.photos/250/150" alt="" class="img-fluid">
-				<p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Hic, laborum quis veniam perspiciatis ex eos, et pariatur natus vero, quasi voluptates nesciunt delectus corrupti nostrum? Est pariatur quaerat repellendus illum!</p>
-				<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis laboriosam necessitatibus quo expedita culpa consectetur esse aut ducimus harum maxime ipsam tempora modi pariatur voluptates, fugit dolorum id? Ipsa, ut.</p>
-				<a href="#" class="btn btn-primary">Lire la suite</a>
+				<img src="{{article.image}}" alt="" class="img-fluid">
+				{{article.content|raw}}
 			</div>
 		</article>
-    </section>
+	</section>
+	<h2 class="text-center mx-auto m-3">Commentaires</h2>
+	<section id="commentaire" class="col-md-10 mx-auto">
+		{% for comment in article.comments %}
+			<div class="comment">
+				<div class="row">
+					<div class="col-md-3">
+						{{comment.author}}
+						(<small>{{comment.createdAt|date('d/m/Y à H:i:s')}}</small>)
+					</div>
+					<div class="col-md-9">
+						{{comment.content|raw}}
+					</div>
+				</div>
+			</div>
+			<hr>
+		{% endfor %}
+	</section>
 {% endblock %}

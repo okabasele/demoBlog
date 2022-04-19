@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Form\RechercheType;
+use App\Repository\ArticleRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -26,18 +28,26 @@ class BlogController extends AbstractController
     #[Route('/blog', name: 'app_blog')]
 
     //chaque route lance la méthode ci-dessous
-    public function index(): Response
+    public function index(ArticleRepository $repo): Response
     {
+        $form = $this->createForm(RechercheType::class);
+        $articles=$repo->findAll();
         //la méthode render() qui permet d'afficher un template
         return $this->render('blog/index.html.twig', [
-            'controller_name' => 'BlogController',
+            'articles' => $articles,
+            'formRecherche'=>$form->createView()
         ]);
     }
 
-    #[Route('/blog/12', name: 'blog_show')]
+    #[Route('/blog/show/{id}', name: 'blog_show')]
 
-    public function show()
+    public function show(ArticleRepository $repo, int $id)
     {
-        return $this->render('blog/show.html.twig');
+        $article = $repo->find($id);
+        return $this->render('blog/show.html.twig', [
+            'article' => $article
+        ]
+    
+    );
     }
 }

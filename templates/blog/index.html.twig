@@ -4,36 +4,33 @@
 {% endblock %}
 
 {% block body %}
+
+{{form_start(formRecherche) }}
+
+{{
+	form_widget(formRecherche.recherche, {
+		attr : {
+			placeholder : "Recherchez un article"
+			}
+		}
+		)
+}}
+<button type="submit" class="btn btn-primary">Rechercher</button>
+{{form_end(formRecherche) }}
+
+	{% for article in articles %}
 	<section class="articles">
-		<article>
-			<h2>Titre de l'article</h2>
-			<div class="metadata">Ecrit le 04/04/2022 à 17:20 dans la catégorie Politique</div>
-			<div class="content">
-				<img src="" alt="">
-				<p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Hic, laborum quis veniam perspiciatis ex eos, et pariatur natus vero, quasi voluptates nesciunt delectus corrupti nostrum? Est pariatur quaerat repellendus illum!</p>
-				<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis laboriosam necessitatibus quo expedita culpa consectetur esse aut ducimus harum maxime ipsam tempora modi pariatur voluptates, fugit dolorum id? Ipsa, ut.</p>
-				<a href="{{path('blog_show')}}" class="btn btn-primary">Lire la suite</a>
-			</div>
-		</article>
-        <article>
-			<h2>Titre de l'article</h2>
-			<div class="metadata">Ecrit le 04/04/2022 à 17:20 dans la catégorie Politique</div>
-			<div class="content">
-				<img src="" alt="">
-				<p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Hic, laborum quis veniam perspiciatis ex eos, et pariatur natus vero, quasi voluptates nesciunt delectus corrupti nostrum? Est pariatur quaerat repellendus illum!</p>
-				<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis laboriosam necessitatibus quo expedita culpa consectetur esse aut ducimus harum maxime ipsam tempora modi pariatur voluptates, fugit dolorum id? Ipsa, ut.</p>
-				<a href="#" class="btn btn-primary">Lire la suite</a>
-			</div>
-		</article>
-        <article>
-			<h2>Titre de l'article</h2>
-			<div class="metadata">Ecrit le 04/04/2022 à 17:20 dans la catégorie Politique</div>
-			<div class="content">
-				<img src="" alt="">
-				<p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Hic, laborum quis veniam perspiciatis ex eos, et pariatur natus vero, quasi voluptates nesciunt delectus corrupti nostrum? Est pariatur quaerat repellendus illum!</p>
-				<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis laboriosam necessitatibus quo expedita culpa consectetur esse aut ducimus harum maxime ipsam tempora modi pariatur voluptates, fugit dolorum id? Ipsa, ut.</p>
-				<a href="#" class="btn btn-primary">Lire la suite</a>
-			</div>
-		</article>
-	</section>
+		<h2>{{article.title}}</h2>
+		<div class="metadata">Ecrit le
+			{{article.createdAt|date('d/m/Y à H:i:s')}}
+			dans la catégorie
+			{{article.category.title}}
+		</div>
+		<div class="content">
+			<img src="{{article.image}}" alt="" class="img-fluid">
+			{{article.content|slice(0,50)|raw}}
+			<a href="{{path('blog_show',{'id':article.id}) }}" class="btn btn-primary">Lire la suite</a>
+		</div>
+	</section>	
+	{% endfor %}
 {% endblock %}
