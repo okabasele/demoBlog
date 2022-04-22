@@ -6,6 +6,7 @@ use App\Form\RechercheType;
 use App\Repository\ArticleRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class BlogController extends AbstractController
@@ -28,10 +29,17 @@ class BlogController extends AbstractController
     #[Route('/blog', name: 'app_blog')]
 
     //chaque route lance la méthode ci-dessous
-    public function index(ArticleRepository $repo): Response
+    public function index(ArticleRepository $repo, Request $request): Response
     {
         $form = $this->createForm(RechercheType::class);
-        $articles=$repo->findAll();
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid() && $form->get('recherche')->getData() != "") { //si on fait une recherche
+           $data = $form->get('recherche')->getData(); //récuperer la saisie de l'utilisateur
+           $articles = $repo->getArticlesByName($data);
+        } else {
+            $articles=$repo->findAll();
+        }
+
         //la méthode render() qui permet d'afficher un template
         return $this->render('blog/index.html.twig', [
             'articles' => $articles,

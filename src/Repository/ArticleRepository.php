@@ -12,6 +12,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Article|null find($id, $lockMode = null, $lockVersion = null)
  * @method Article|null findOneBy(array $criteria, array $orderBy = null)
  * @method Article[]    findAll()
+ * @method Article[]    getArticlesByName(string $saisie)
  * @method Article[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class ArticleRepository extends ServiceEntityRepository
@@ -61,6 +62,17 @@ class ArticleRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function getArticlesByName(string $saisie)
+    {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.title LIKE :val') //On utilise LIKE quand on travaille avec des strings
+            ->setParameter('val', "%$saisie%")
+            ->orderBy('a.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 
     /*
     public function findOneBySomeField($value): ?Article
